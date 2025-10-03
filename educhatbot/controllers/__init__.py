@@ -1,2 +1,2 @@
-from .chatbot_controller import ChatbotController
+from .ask_controller import AskController
 from .feedback_controller import FeedbackController

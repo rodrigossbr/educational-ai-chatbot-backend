@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'drf_spectacular',
-    'educhatbot'
+    'educhatbot',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -139,3 +141,5 @@ SPECTACULAR_SETTINGS = {
     'SCHEMA_PATH_PREFIX': r'/api/',
     'SECURITY': [],
 }
+
+CORS_ALLOW_ALL_ORIGINS = True

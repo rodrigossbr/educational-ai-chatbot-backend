@@ -1,4 +1,4 @@
-from .chatbot_request_serializer import ChatbotRequestSerializer
-from .chatbot_response_serializer import ChatbotResponseSerializer
+from .ask_serializer import AskSerializer
+from .bot_message_serializer import BotMessageSerializer
 from .feedback_request_serializer import FeedbackRequestSerializer
 from .feedback_response_serializer import FeedbackResponseSerializer
