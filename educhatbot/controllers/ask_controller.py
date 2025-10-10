@@ -4,13 +4,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..serializers import AskSerializer, BotMessageSerializer
+from ..services import ChatbotService
 
 
 def generate_reply(user_text: str) -> str:
-    cleaned = user_text.strip()
-    if not cleaned:
+    cleaned_text = user_text.strip()
+    chatbotService = ChatbotService()
+    if not cleaned_text:
         return "Não entendi. Pode escrever novamente?"
-    return f"Entendi: {cleaned}"
+    resul_text = chatbotService.get_response(cleaned_text)
+    return f"{resul_text}"
 
 
 @extend_schema(
