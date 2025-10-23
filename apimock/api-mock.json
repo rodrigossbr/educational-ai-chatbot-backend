@@ -1,0 +1,824 @@
+{
+  "uuid": "38066fc0-6d73-42cc-b765-58f7eeb0d055",
+  "lastMigration": 33,
+  "name": "Api mock",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3001,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "8f839062-f25a-44dd-adcb-4408b3a26be9",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/disciplinas",
+      "responses": [
+        {
+          "uuid": "546f327d-974d-4937-a6f2-a8f30a33319d",
+          "body": "{\r\n  \"disciplinas\": [\r\n    {\r\n      \"id\": \"matematica\", \r\n      \"nome\": \"Matemática\", \r\n      \"aliases\": [\"mat\", \"matematica\"]\r\n    },\r\n    {\r\n      \"id\": \"portugues\", \r\n      \"nome\": \"Português\", \r\n      \"aliases\": [\"port\", \"pt\", \"lingua portuguesa\"]\r\n    },\r\n    {\r\n      \"id\": \"historia\", \r\n      \"nome\": \"História\", \r\n      \"aliases\": [\"hist\", \"his\"]\r\n    },\r\n    {\r\n      \"id\": \"ciencias\", \r\n      \"nome\": \"Ciências\", \r\n      \"aliases\": [\"cien\", \"ciencias\"]\r\n    },\r\n    {\r\n      \"id\": \"geografia\", \r\n      \"nome\": \"Geografia\", \r\n      \"aliases\": [\"geo\", \"geog\"]\r\n    }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": true,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "52f187c7-680d-4b0a-a5ae-a9f312400daa",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/disciplinas/conteudos",
+      "responses": [
+        {
+          "uuid": "5ab6e42c-ecab-4157-8d9c-660d857506e1",
+          "body": "{\r\n  \"disciplina\": \"Matemática\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"eq-1-grau\",\r\n      \"titulo\": \"Equações de 1º grau\",\r\n      \"resumo_simplificado\": \"São expressões com incógnita elevada a 1. Exemplo: x + 5 = 12 → x = 7.\"\r\n    },\r\n    {\r\n      \"id\": \"porcentagem\",\r\n      \"titulo\": \"Porcentagem\",\r\n      \"resumo_simplificado\": \"É a parte de 100. Exemplo: 20% de 150 = 30.\"\r\n    },\r\n    {\r\n      \"id\": \"geometria\",\r\n      \"titulo\": \"Geometria básica\",\r\n      \"resumo_simplificado\": \"Estuda figuras, perímetros e áreas. Exemplo: área do retângulo = base × altura.\"\r\n    }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Matemática",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "disciplina",
+              "value": "matematica",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": true,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "d1b27f3d-f792-4bce-942b-4af33268d2a1",
+          "body": "{\r\n  \"disciplina\": \"Português\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"interpretacao\",\r\n      \"titulo\": \"Interpretação de texto\",\r\n      \"resumo_simplificado\": \"Ler com atenção para entender ideias principais e implícitas.\"\r\n    },\r\n    {\r\n      \"id\": \"ortografia\",\r\n      \"titulo\": \"Ortografia\",\r\n      \"resumo_simplificado\": \"Regras de escrita correta das palavras.\"\r\n    },\r\n    {\r\n      \"id\": \"redacao\",\r\n      \"titulo\": \"Redação\",\r\n      \"resumo_simplificado\": \"Texto com introdução, desenvolvimento e conclusão.\"\r\n    }\r\n  ]\r\n}\r\n\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Português",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "disciplina",
+              "value": "portugues",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "cbab8beb-b692-410b-9f2e-0477c878c4bf",
+          "body": "{\r\n  \"disciplina\": \"História\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"brasil-colonia\",\r\n      \"titulo\": \"Brasil Colônia\",\r\n      \"resumo_simplificado\": \"Período de 1500 a 1822, com exploração do pau-brasil e ciclo do ouro.\"\r\n    },\r\n    {\r\n      \"id\": \"independencia\",\r\n      \"titulo\": \"Independência do Brasil\",\r\n      \"resumo_simplificado\": \"1822 — Dom Pedro I declarou a independência no dia 7 de setembro.\"\r\n    },\r\n    {\r\n      \"id\": \"republica\",\r\n      \"titulo\": \"Proclamação da República\",\r\n      \"resumo_simplificado\": \"1889 — Marechal Deodoro da Fonseca proclamou o novo regime.\"\r\n    }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "História",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "disciplina",
+              "value": "historia",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "c06e473c-748e-4da4-8e29-9706f496047f",
+          "body": "{\r\n  \"disciplina\": \"Ciências\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"fotossintese\",\r\n      \"titulo\": \"Fotossíntese\",\r\n      \"resumo_simplificado\": \"Plantas produzem alimento com luz solar, água e gás carbônico.\"\r\n    },\r\n    {\r\n      \"id\": \"sistema-solar\",\r\n      \"titulo\": \"Sistema Solar\",\r\n      \"resumo_simplificado\": \"O Sol e os planetas que giram ao seu redor. A Terra é o terceiro planeta.\"\r\n    },\r\n    {\r\n      \"id\": \"agua\",\r\n      \"titulo\": \"Ciclo da Água\",\r\n      \"resumo_simplificado\": \"Evaporação, condensação e precipitação mantêm a água circulando na natureza.\"\r\n    }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Ciências",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "disciplina",
+              "value": "ciencias",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "208a1718-83c7-45db-a2d8-6d010cdaae4d",
+          "body": "{\r\n  \"disciplina\": \"Geografia\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"mapas\",\r\n      \"titulo\": \"Mapas e coordenadas\",\r\n      \"resumo_simplificado\": \"Mapas representam lugares. Linhas imaginárias ajudam na localização.\"\r\n    },\r\n    {\r\n      \"id\": \"climas\",\r\n      \"titulo\": \"Climas da Terra\",\r\n      \"resumo_simplificado\": \"Diferentes regiões têm climas como tropical, árido e polar.\"\r\n    },\r\n    {\r\n      \"id\": \"populacao\",\r\n      \"titulo\": \"População mundial\",\r\n      \"resumo_simplificado\": \"Distribuição das pessoas pelo planeta varia com fatores econômicos e naturais.\"\r\n    }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Geografia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "disciplina",
+              "value": "geografia",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "e04ea2b1-6d3a-49e2-82c7-53019678dda0",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Vazia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "1a6106da-5686-44a9-bef1-e5fd74d65b7b",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/disciplinas/conteudos/aprofundamento",
+      "responses": [
+        {
+          "uuid": "a6b74826-7945-4927-a5e0-16050bc57641",
+          "body": "{\r\n  \"topico\": \"Equações do 1º grau\",\r\n  \"disciplina\": \"Matemática\",\r\n  \"nivel\": \"aprofundamento\",\r\n  \"descricao\": \"As equações do primeiro grau são expressões matemáticas onde a incógnita está elevada a 1. Elas modelam situações cotidianas e são resolvidas isolando a variável.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"1. Identificar os termos da equação.\",\r\n      \"2. Isolar a incógnita em um dos lados.\",\r\n      \"3. Simplificar a expressão resultante.\"\r\n    ],\r\n    \"exemplo\": \"2x + 4 = 10 → 2x = 6 → x = 3\",\r\n    \"referencias\": [\r\n      { \"titulo\": \"Equações - Matemática Básica\", \"url\": \"https://www.todamateria.com.br/equacoes-do-1-grau/\" }\r\n    ]\r\n  }\r\n}\r\n\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Matemática - equacoes",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "equacoes",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": true,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "06973c65-d545-4f86-add9-1300d28cffa7",
+          "body": "{\r\n  \"disciplina\": \"Português\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"interpretacao\",\r\n      \"titulo\": \"Interpretação de texto\",\r\n      \"resumo_simplificado\": \"Ler com atenção para entender ideias principais e implícitas.\"\r\n    },\r\n    {\r\n      \"id\": \"ortografia\",\r\n      \"titulo\": \"Ortografia\",\r\n      \"resumo_simplificado\": \"Regras de escrita correta das palavras.\"\r\n    },\r\n    {\r\n      \"id\": \"redacao\",\r\n      \"titulo\": \"Redação\",\r\n      \"resumo_simplificado\": \"Texto com introdução, desenvolvimento e conclusão.\"\r\n    }\r\n  ]\r\n}\r\n\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Português",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "disciplina",
+              "value": "portugues",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "9f58784c-dbf5-4efa-a825-70b02e3116a4",
+          "body": "{\r\n  \"disciplina\": \"História\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"brasil-colonia\",\r\n      \"titulo\": \"Brasil Colônia\",\r\n      \"resumo_simplificado\": \"Período de 1500 a 1822, com exploração do pau-brasil e ciclo do ouro.\"\r\n    },\r\n    {\r\n      \"id\": \"independencia\",\r\n      \"titulo\": \"Independência do Brasil\",\r\n      \"resumo_simplificado\": \"1822 — Dom Pedro I declarou a independência no dia 7 de setembro.\"\r\n    },\r\n    {\r\n      \"id\": \"republica\",\r\n      \"titulo\": \"Proclamação da República\",\r\n      \"resumo_simplificado\": \"1889 — Marechal Deodoro da Fonseca proclamou o novo regime.\"\r\n    }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "História",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "disciplina",
+              "value": "historia",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "88449c32-58b1-4308-b0b1-1065895c082c",
+          "body": "{\r\n  \"topico\": \"Fotossíntese\",\r\n  \"disciplina\": \"Ciências\",\r\n  \"nivel\": \"aprofundamento\",\r\n  \"descricao\": \"A fotossíntese é o processo bioquímico pelo qual plantas, algas e algumas bactérias transformam energia luminosa em energia química, armazenada na forma de glicose. Esse processo é fundamental para a manutenção da vida na Terra, pois libera oxigênio e forma a base das cadeias alimentares.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"Fase clara: ocorre nos tilacoides e depende da luz solar para gerar ATP e NADPH.\",\r\n      \"Fase escura (Ciclo de Calvin): ocorre no estroma e utiliza ATP e NADPH para fixar CO₂ em glicose.\"\r\n    ],\r\n    \"equacao_simplificada\": \"6 CO₂ + 6 H₂O + luz → C₆H₁₂O₆ + 6 O₂\",\r\n    \"curiosidades\": [\r\n      \"A fotossíntese influencia diretamente o clima global.\",\r\n      \"As plantas não 'respiram' oxigênio à noite da mesma forma que nós — elas continuam trocando gases, mas em menor intensidade.\"\r\n    ],\r\n    \"referencias\": [\r\n      {\r\n        \"titulo\": \"Fotossíntese - Khan Academy\",\r\n        \"url\": \"https://pt.khanacademy.org/science/biology/photosynthesis\"\r\n      },\r\n      {\r\n        \"titulo\": \"Biologia Hoje - Capítulo 6\",\r\n        \"url\": \"https://www.editorasanar.com.br/biologia-fotossintese\"\r\n      }\r\n    ]\r\n  }\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Ciências - Fotossíntese",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "fotossintese",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "16d32a62-6da3-4f9f-8bab-bdbb2cca3adf",
+          "body": "{\r\n  \"disciplina\": \"Geografia\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"mapas\",\r\n      \"titulo\": \"Mapas e coordenadas\",\r\n      \"resumo_simplificado\": \"Mapas representam lugares. Linhas imaginárias ajudam na localização.\"\r\n    },\r\n    {\r\n      \"id\": \"climas\",\r\n      \"titulo\": \"Climas da Terra\",\r\n      \"resumo_simplificado\": \"Diferentes regiões têm climas como tropical, árido e polar.\"\r\n    },\r\n    {\r\n      \"id\": \"populacao\",\r\n      \"titulo\": \"População mundial\",\r\n      \"resumo_simplificado\": \"Distribuição das pessoas pelo planeta varia com fatores econômicos e naturais.\"\r\n    }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Geografia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "disciplina",
+              "value": "geografia",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "f2f22387-2b15-4406-bed3-427de92c6567",
+          "body": "{\r\n  \"topico\": \"Porcentagem\",\r\n  \"disciplina\": \"Matemática\",\r\n  \"descricao\": \"A porcentagem expressa uma razão em relação a 100 e é amplamente usada em descontos, juros e estatísticas.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"1. Identificar o valor base e o percentual.\",\r\n      \"2. Calcular o percentual sobre o valor base.\",\r\n      \"3. Aplicar o resultado conforme o contexto (aumento, desconto, etc.).\"\r\n    ],\r\n    \"referencias\": [\r\n      { \"titulo\": \"Porcentagem - Toda Matéria\", \"url\": \"https://www.todamateria.com.br/porcentagem/\" }\r\n    ]\r\n  }\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Matemática - porcentagem",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "porcentagem",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "8aaf3fb2-1835-4784-86e0-4edcc02400b2",
+          "body": "{\n  \"erro\": \"Tópico não encontrado\"\n}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Vazia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "4fd1ecf3-7484-4c07-b726-e5fb7c00d290",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/institucional/locais",
+      "responses": [
+        {
+          "uuid": "e9ae2f06-5d0e-49f0-80f1-74125eab6fb9",
+          "body": "{\r\n  \"campi\": [\r\n    {\r\n      \"campus\": \"São Leopoldo\",\r\n      \"locais\": [\r\n        {\"id\": \"biblioteca\", \"nome\": \"Biblioteca\"},\r\n        {\"id\": \"secretaria\", \"nome\": \"Secretaria Acadêmica\"},\r\n        {\"id\": \"financeiro\", \"nome\": \"Financeiro\"},\r\n        {\"id\": \"acessibilidade\", \"nome\": \"Núcleo de Acessibilidade\"}\r\n      ]\r\n    },\r\n    {\r\n      \"campus\": \"Porto Alegre\",\r\n      \"locais\": [\r\n        {\"id\": \"biblioteca\", \"nome\": \"Biblioteca\"},\r\n        {\"id\": \"secretaria\", \"nome\": \"Secretaria Acadêmica\"},\r\n        {\"id\": \"financeiro\", \"nome\": \"Financeiro\"}\r\n      ]\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Locais",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "de9df513-30ca-464c-9105-80ba9a7b6864",
+          "body": "{\n  \"erro\": \"Tópico não encontrado\"\n}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Vazia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "9b4f5993-0f13-4ab2-ae26-380b27649d94",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/institucional/horarios",
+      "responses": [
+        {
+          "uuid": "d62a80b5-c9dd-4494-b18c-d62df5cbfc67",
+          "body": "{\r\n  \"local\": \"Biblioteca\",\r\n  \"campus\": \"São Leopoldo\",\r\n  \"descricao_curta\": \"Empréstimo, estudo e pesquisa.\",\r\n  \"horarios\": {\r\n    \"segunda_sexta\": \"08:00 às 21:30\",\r\n    \"sabado\": \"09:00 às 13:00\",\r\n    \"domingo\": \"Fechado\"\r\n  },\r\n  \"observacoes_acessibilidade\": [\r\n    \"Rota acessível por elevador.\",\r\n    \"Materiais em Braille mediante solicitação.\"\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "São leopoldo - Biblioteca",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "biblioteca",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "São Leopoldo",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "3316251f-8ba2-42ee-ad15-cde944f0b8e4",
+          "body": "{\r\n  \"local\": \"Secretaria Acadêmica\",\r\n  \"campus\": \"São Leopoldo\",\r\n  \"descricao_curta\": \"Atendimento a matrículas e documentos.\",\r\n  \"horarios\": {\r\n    \"segunda_sexta\": \"09:00 às 19:00\",\r\n    \"sabado\": \"Fechado\",\r\n    \"domingo\": \"Fechado\"\r\n  },\r\n  \"observacoes_acessibilidade\": [\r\n    \"Atendimento prioritário e janela baixa.\",\r\n    \"Intérprete de Libras nas quartas, 14h às 17h.\"\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "São leopoldo - Secretaria Acadêmica",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "secretaria",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "São Leopoldo",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "392626a3-2811-479b-97bc-f709305a7f17",
+          "body": "{\n  \"erro\": \"Local não encontrado\"\n}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Vazia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "c576570b-e6eb-47e9-86bf-6ee7b0aba94c",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/institucional/contatos",
+      "responses": [
+        {
+          "uuid": "91029272-4003-40b4-9b41-73bedf1e80ef",
+          "body": "{\r\n  \"local\": \"Biblioteca\",\r\n  \"campus\": \"Porto Alegre\",\r\n  \"email\": \"biblioteca.poa@universidade.br\",\r\n  \"telefone\": \"+55 (51) 3333-0000\",\r\n  \"site\": \"https://biblioteca.universidade.br/poa\",\r\n  \"endereco\": \"Av. Exemplo, 123 - Porto Alegre - RS\",\r\n  \"mapa_url\": \"https://maps.example.com/?q=biblioteca+poa\",\r\n  \"acessibilidade\": [\r\n    \"Sinalização tátil no piso.\",\r\n    \"Atendimento prioritário.\"\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Porto Alegre - Biblioteca",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "biblioteca",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "Porto Alegre",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "3f6dd283-660b-4371-bb2c-59440879a617",
+          "body": "{\r\n  \"local\": \"Secretaria Acadêmica\",\r\n  \"campus\": \"São Leopoldo\",\r\n  \"descricao_curta\": \"Atendimento a matrículas e documentos.\",\r\n  \"horarios\": {\r\n    \"segunda_sexta\": \"09:00 às 19:00\",\r\n    \"sabado\": \"Fechado\",\r\n    \"domingo\": \"Fechado\"\r\n  },\r\n  \"observacoes_acessibilidade\": [\r\n    \"Atendimento prioritário e janela baixa.\",\r\n    \"Intérprete de Libras nas quartas, 14h às 17h.\"\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "São leopoldo - Secretaria Acadêmica",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "secretaria",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "São Leopoldo",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "2c29a30b-c544-40a2-bc89-fca9560896f4",
+          "body": "{\n  \"erro\": \"Tópico não encontrado\"\n}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Vazia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "8e88be39-7334-4a87-9a54-c6e5ec194afb",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/institucional/faq",
+      "responses": [
+        {
+          "uuid": "8dd6c451-a313-4f90-b6ac-2a27d1ad387f",
+          "body": "{\r\n  \"local\": \"Biblioteca\",\r\n  \"campus\": \"São Leopoldo\",\r\n  \"faq\": [\r\n    {\r\n      \"pergunta\": \"Posso renovar livros pela internet?\",\r\n      \"resposta_simplificada\": \"Sim. Use o portal da biblioteca com seu login.\"\r\n    },\r\n    {\r\n      \"pergunta\": \"Há salas de estudo em grupo?\",\r\n      \"resposta_simplificada\": \"Sim. Reserve com antecedência pelo sistema.\"\r\n    },\r\n    {\r\n      \"pergunta\": \"Existe acervo acessível?\",\r\n      \"resposta_simplificada\": \"Há audiolivros e leitores de tela nas ilhas de pesquisa.\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "São Leopoldo - Biblioteca",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "biblioteca",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "São Leopoldo",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "586fbe3b-526e-47e1-8893-f859074c57ad",
+          "body": "{\r\n  \"local\": \"Secretaria Acadêmica\",\r\n  \"campus\": \"São Leopoldo\",\r\n  \"faq\": [\r\n    {\r\n      \"pergunta\": \"Como emitir atestado de matrícula?\",\r\n      \"resposta_simplificada\": \"No portal do aluno, aba Documentos.\"\r\n    },\r\n    {\r\n      \"pergunta\": \"Como pedir histórico escolar?\",\r\n      \"resposta_simplificada\": \"Solicite pelo portal. Entrega em até 3 dias úteis.\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "São leopoldo - Secretaria Acadêmica",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "secretaria",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "São Leopoldo",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "d77d6a7e-842b-4473-86e1-5fde95093a30",
+          "body": "{\n  \"erro\": \"Tópico não encontrado\"\n}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Vazia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "8f839062-f25a-44dd-adcb-4408b3a26be9"
+    },
+    {
+      "type": "route",
+      "uuid": "52f187c7-680d-4b0a-a5ae-a9f312400daa"
+    },
+    {
+      "type": "route",
+      "uuid": "1a6106da-5686-44a9-bef1-e5fd74d65b7b"
+    },
+    {
+      "type": "route",
+      "uuid": "4fd1ecf3-7484-4c07-b726-e5fb7c00d290"
+    },
+    {
+      "type": "route",
+      "uuid": "9b4f5993-0f13-4ab2-ae26-380b27649d94"
+    },
+    {
+      "type": "route",
+      "uuid": "8e88be39-7334-4a87-9a54-c6e5ec194afb"
+    },
+    {
+      "type": "route",
+      "uuid": "c576570b-e6eb-47e9-86bf-6ee7b0aba94c"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}

@@ -58,3 +58,7 @@ Para subir a aplicação
 ```shell
   .venv/Scripts/python.exe manage.py runserver 8000
 ```
+Para atualizar o requirements 
+```shell
+pip freeze > requirements.txt
+```
