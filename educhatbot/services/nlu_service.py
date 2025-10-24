@@ -120,6 +120,10 @@ class NLUService:
         Texto: "Quero saber mais sobre fotossíntese"
         JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": "fotossintese"}}}}
         
+        Exemplo 9.1:
+        Texto: "Quero saber mais sobre equações"
+        JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": "fotossintese"}}}}
+        
         Exemplo 10:
         Texto: "Aprofunda esse tópico pra mim"
         JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": ""}}}}

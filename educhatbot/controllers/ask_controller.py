@@ -37,7 +37,8 @@ class AskController(APIView):
             data={
                 'id': 1,
                 'role': 'bot',
-                'text': bot_text
+                'text': bot_text,
+                'feedback_enabled': False if user_text == "Olá" else True
             }
         )
         out_serializer.is_valid(raise_exception=True)

@@ -11,3 +11,6 @@ class BotMessageSerializer(serializers.Serializer):
     text = serializers.CharField(
         help_text="A resposta do chatbot."
     )
+    feedback_enabled = serializers.BooleanField(
+        help_text="Feedbak de mensagem útil habilitado para a resposta."
+    )
