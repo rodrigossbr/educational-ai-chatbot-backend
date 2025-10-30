@@ -7,12 +7,12 @@ from ..serializers import AskSerializer, BotMessageSerializer
 from ..services import ChatbotService
 
 
-def generate_reply(user_text: str) -> str:
+def generate_reply(user_text: str, session_id: int) -> str:
     cleaned_text = user_text.strip()
     chatbotService = ChatbotService()
     if not cleaned_text:
         return "Não entendi. Pode escrever novamente?"
-    resul_text = chatbotService.get_response(cleaned_text)
+    resul_text = chatbotService.get_response(cleaned_text, session_id)
     return f"{resul_text}"
 
 
@@ -30,8 +30,9 @@ class AskController(APIView):
         serializer = AskSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        session_id = serializer.data.get('session_id')
         user_text = serializer.validated_data.get('text')
-        bot_text = generate_reply(user_text)
+        bot_text = generate_reply(user_text, session_id)
 
         out_serializer = BotMessageSerializer(
             data={

@@ -4,7 +4,6 @@
   source .venv/Scripts/activate
 ````
 
-
 ## Subindo o banco de dados
 
 Para subir o container do banco
@@ -48,6 +47,11 @@ Instalando os pacotes
   .venv/Scripts/python.exe -m pip install -r requirements.txt
 ```
 
+Para atualizar o requirements 
+```shell
+pip freeze > requirements.txt
+```
+
 Confirmar instalação do Django
 ```shell
   .venv/Scripts/python.exe -m pip show django
@@ -57,8 +61,4 @@ Confirmar instalação do Django
 Para subir a aplicação
 ```shell
   .venv/Scripts/python.exe manage.py runserver 8000
-```
-Para atualizar o requirements 
-```shell
-pip freeze > requirements.txt
 ```

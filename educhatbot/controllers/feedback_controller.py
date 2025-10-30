@@ -29,13 +29,16 @@ class FeedbackController(APIView):
 
         data = serializer.validated_data
 
-        self.service.submit_feedback(
-            data["user_message"],
-            data["chatbot_response"],
-            data["helpful"]
+        saved_feedback = self.service.submit_feedback(
+            data.get("id", None),
+            data.get("session_id"),
+            data.get("user_question"),
+            data.get("bot_answer"),
+            data.get("helpful", None)
         )
 
-        return Response({'status': "feedback registrado com sucesso"})
+        serializer = FeedbackResponseSerializer(saved_feedback)
+        return Response(serializer.data)
 
     @extend_schema(
         responses={200: FeedbackResponseSerializer(many=True)},

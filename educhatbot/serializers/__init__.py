@@ -2,3 +2,4 @@ from .ask_serializer import AskSerializer
 from .bot_message_serializer import BotMessageSerializer
 from .feedback_request_serializer import FeedbackRequestSerializer
 from .feedback_response_serializer import FeedbackResponseSerializer
+from .session_response_serializer import SessionResponseSerializer
