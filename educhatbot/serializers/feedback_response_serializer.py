@@ -9,6 +9,7 @@ class FeedbackResponseSerializer(serializers.Serializer):
     user_question = serializers.CharField()
     bot_answer = serializers.CharField()
     helpful = serializers.BooleanField()
+    detected_intent = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     created_at = serializers.DateTimeField()
 
     def to_representation(self, instance: Feedback):

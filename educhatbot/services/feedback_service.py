@@ -12,7 +12,10 @@ class FeedbackService:
     def get_next_session_id(self) -> int:
         return self.repository.get_next_session_id()
 
-    def submit_feedback(self, feedback_id, session_id, user_message, chatbot_response, helpful):
+    def submit_feedback(
+            self, feedback_id, session_id,
+            user_message, chatbot_response, helpful, detected_intent
+    ):
         if feedback_id:
             feedback = self.repository.get_by_id(feedback_id)
             if session_id is not None:
@@ -29,7 +32,8 @@ class FeedbackService:
                 session_id=session_id,
                 user_question=user_message,
                 bot_answer=chatbot_response,
-                helpful=helpful
+                helpful=helpful,
+                detected_intent=detected_intent
             )
         self.repository.save(feedback)
         return feedback
@@ -87,3 +91,29 @@ class FeedbackService:
 
         scored.sort(key=lambda t: t[0], reverse=True)
         return [fb for score, fb in scored[:limit]]
+
+    def get_negative_intents_for_similar_text(self, text: str, min_score: float = 0.7):
+        """
+        Retorna uma lista de intents que já foram rejeitadas (helpful=False)
+        para perguntas parecidas com o texto atual.
+        """
+        if not text:
+            return []
+
+        bads = (
+            Feedback.objects
+            .filter(helpful=False)
+            .exclude(detected_intent__isnull=True)
+            .exclude(detected_intent__exact="")
+            .order_by("-created_at")[:200]
+        )
+
+        text_norm = text.lower()
+        intents = set()
+        for fb in bads:
+            prev = (fb.user_question or "").lower()
+            score = SequenceMatcher(None, text_norm, prev).ratio()
+            if score >= min_score:
+                intents.add(fb.detected_intent)
+
+        return list(intents)

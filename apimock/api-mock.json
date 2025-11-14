@@ -240,6 +240,33 @@
           "callbacks": []
         },
         {
+          "uuid": "f2f22387-2b15-4406-bed3-427de92c6567",
+          "body": "{\r\n  \"topico\": \"Porcentagem\",\r\n  \"disciplina\": \"Matemática\",\r\n  \"descricao\": \"A porcentagem expressa uma razão em relação a 100 e é amplamente usada em descontos, juros e estatísticas.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"1. Identificar o valor base e o percentual.\",\r\n      \"2. Calcular o percentual sobre o valor base.\",\r\n      \"3. Aplicar o resultado conforme o contexto (aumento, desconto, etc.).\"\r\n    ],\r\n    \"referencias\": [\r\n      { \"titulo\": \"Porcentagem - Toda Matéria\", \"url\": \"https://www.todamateria.com.br/porcentagem/\" }\r\n    ]\r\n  }\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Matemática - porcentagem",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "porcentagem",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
           "uuid": "06973c65-d545-4f86-add9-1300d28cffa7",
           "body": "{\r\n  \"disciplina\": \"Português\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"interpretacao\",\r\n      \"titulo\": \"Interpretação de texto\",\r\n      \"resumo_simplificado\": \"Ler com atenção para entender ideias principais e implícitas.\"\r\n    },\r\n    {\r\n      \"id\": \"ortografia\",\r\n      \"titulo\": \"Ortografia\",\r\n      \"resumo_simplificado\": \"Regras de escrita correta das palavras.\"\r\n    },\r\n    {\r\n      \"id\": \"redacao\",\r\n      \"titulo\": \"Redação\",\r\n      \"resumo_simplificado\": \"Texto com introdução, desenvolvimento e conclusão.\"\r\n    }\r\n  ]\r\n}\r\n\r\n",
           "latency": 0,
@@ -253,7 +280,7 @@
           "rules": [
             {
               "target": "query",
-              "modifier": "disciplina",
+              "modifier": "topico",
               "value": "portugues",
               "invert": false,
               "operator": "equals"
@@ -280,7 +307,7 @@
           "rules": [
             {
               "target": "query",
-              "modifier": "disciplina",
+              "modifier": "topico",
               "value": "historia",
               "invert": false,
               "operator": "equals"
@@ -322,10 +349,10 @@
         },
         {
           "uuid": "16d32a62-6da3-4f9f-8bab-bdbb2cca3adf",
-          "body": "{\r\n  \"disciplina\": \"Geografia\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"mapas\",\r\n      \"titulo\": \"Mapas e coordenadas\",\r\n      \"resumo_simplificado\": \"Mapas representam lugares. Linhas imaginárias ajudam na localização.\"\r\n    },\r\n    {\r\n      \"id\": \"climas\",\r\n      \"titulo\": \"Climas da Terra\",\r\n      \"resumo_simplificado\": \"Diferentes regiões têm climas como tropical, árido e polar.\"\r\n    },\r\n    {\r\n      \"id\": \"populacao\",\r\n      \"titulo\": \"População mundial\",\r\n      \"resumo_simplificado\": \"Distribuição das pessoas pelo planeta varia com fatores econômicos e naturais.\"\r\n    }\r\n  ]\r\n}\r\n",
+          "body": "{\r\n  \"topico\": \"Coordenadas Geográficas (Latitude e Longitude)\",\r\n  \"disciplina\": \"Geografia\",\r\n  \"descricao\": \"Sistema de paralelos (latitude) e meridianos (longitude) para localizar pontos na superfície terrestre.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"1. Identificar latitude (N/S) e longitude (E/O).\",\r\n      \"2. Ler valores em graus decimais ou DMS (graus, minutos, segundos).\",\r\n      \"3. Cruzar as linhas no mapa ou globo para localizar o ponto.\"\r\n    ]\r\n  },\r\n  \"referencias\": [\r\n    { \"titulo\": \"Brasil Escola — Coordenadas geográficas\", \"url\": \"https://brasilescola.uol.com.br/geografia/coordenadas-geograficas.htm\" },\r\n    { \"titulo\": \"Toda Matéria — Coordenadas geográficas\", \"url\": \"https://www.todamateria.com.br/coordenadas-geograficas/\" }\r\n  ]\r\n}\r\n",
           "latency": 0,
           "statusCode": 200,
-          "label": "Geografia",
+          "label": "Geografia - Coordenadas",
           "headers": [],
           "bodyType": "INLINE",
           "filePath": "",
@@ -334,8 +361,8 @@
           "rules": [
             {
               "target": "query",
-              "modifier": "disciplina",
-              "value": "geografia",
+              "modifier": "topico",
+              "value": "coordenadas",
               "invert": false,
               "operator": "equals"
             }
@@ -348,11 +375,11 @@
           "callbacks": []
         },
         {
-          "uuid": "f2f22387-2b15-4406-bed3-427de92c6567",
-          "body": "{\r\n  \"topico\": \"Porcentagem\",\r\n  \"disciplina\": \"Matemática\",\r\n  \"descricao\": \"A porcentagem expressa uma razão em relação a 100 e é amplamente usada em descontos, juros e estatísticas.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"1. Identificar o valor base e o percentual.\",\r\n      \"2. Calcular o percentual sobre o valor base.\",\r\n      \"3. Aplicar o resultado conforme o contexto (aumento, desconto, etc.).\"\r\n    ],\r\n    \"referencias\": [\r\n      { \"titulo\": \"Porcentagem - Toda Matéria\", \"url\": \"https://www.todamateria.com.br/porcentagem/\" }\r\n    ]\r\n  }\r\n}",
+          "uuid": "335a1ddd-e7aa-486c-a015-1fe2140906a9",
+          "body": "{\r\n  \"topico\": \"Mapas (Elementos e Leitura)\",\r\n  \"disciplina\": \"Geografia\",\r\n  \"descricao\": \"Conceitos básicos de mapas e como interpretar seus elementos (título, legenda, escala, orientação e coordenadas) para localizar e medir.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"1. Identificar título, fonte e legenda para entender o tema e os símbolos do mapa.\",\r\n      \"2. Verificar a orientação (N) e/ou rosa dos ventos; usar coordenadas (latitude/longitude) para localizar pontos.\",\r\n      \"3. Aplicar a escala (numérica ou gráfica) para converter distâncias do mapa para o terreno.\"\r\n    ]\r\n  },\r\n  \"referencias\": [\r\n    { \"titulo\": \"Brasil Escola — Elementos do mapa\", \"url\": \"https://brasilescola.uol.com.br/geografia/elementos-do-mapa.htm\" },\r\n    { \"titulo\": \"Toda Matéria — Mapas\", \"url\": \"https://www.todamateria.com.br/mapas/\" }\r\n  ]\r\n}",
           "latency": 0,
           "statusCode": 200,
-          "label": "Matemática - porcentagem",
+          "label": "Geografia - Mapas",
           "headers": [],
           "bodyType": "INLINE",
           "filePath": "",
@@ -362,7 +389,41 @@
             {
               "target": "query",
               "modifier": "topico",
-              "value": "porcentagem",
+              "value": "mapas",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "3a6e1f38-fe02-48df-b254-0c9a6fa81f9e",
+          "body": "{\r\n  \"topico\": \"Climas da Terra\",\r\n  \"disciplina\": \"Geografia\",\r\n  \"descricao\": \"Os climas da Terra são definidos pela interação entre temperatura, umidade, ventos, latitude, altitude e influência marítima. Eles determinam padrões de tempo e influenciam vegetação, ocupação humana e atividades econômicas.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"1. Analisar a latitude: regiões próximas ao Equador tendem a ser mais quentes; polos mais frios.\",\r\n      \"2. Considerar altitude e relevo: áreas mais altas são mais frias; barreiras montanhosas afetam chuvas.\",\r\n      \"3. Observar maritimidade e continentalidade: áreas costeiras têm menor variação térmica; interiores são mais extremos.\",\r\n      \"4. Identificar massas de ar e correntes marítimas: responsáveis por umidade, secura e anomalias climáticas.\",\r\n      \"5. Classificar o clima segundo padrões globais: tropical, equatorial, temperado, desértico, frio, polar, entre outros.\"\r\n    ]\r\n  },\r\n  \"referencias\": [\r\n    { \"titulo\": \"Brasil Escola — Climas do mundo\", \"url\": \"https://brasilescola.uol.com.br/geografia/climas-do-mundo.htm\" },\r\n    { \"titulo\": \"Toda Matéria — Climas do planeta\", \"url\": \"https://www.todamateria.com.br/climas-da-terra/\" }\r\n  ]\r\n}\r\n",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Geografia - Climas da terra",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "climas",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "climas da terra",
               "invert": false,
               "operator": "equals"
             }

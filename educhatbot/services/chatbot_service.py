@@ -4,7 +4,6 @@ from .educational_content_service import EducationalContentService
 from .generative_service import GenerativeService
 from .nlu_service import NLUService
 
-
 class ChatbotService:
     """
     Serviço orquestrador que utiliza o NLUService e o GenerativeService
@@ -21,7 +20,7 @@ class ChatbotService:
         self.feedback_service = FeedbackService()
         print("ChatbotService inicializado, pronto para orquestrar.")
 
-    def get_response(self, user_input: str, session_id: int | None = None) -> str:
+    def get_response(self, user_input: str, session_id: int | None = None) -> dict:
         """
         Processa a entrada do usuário e retorna a melhor resposta possível,
         utilizando o modelo híbrido (NLU + Generativo).
@@ -34,12 +33,14 @@ class ChatbotService:
         if fb:
             answer = self._answer_with_feedback(user_input, session_id)
             self.feedback_service.mark_consumed(fb)
-            return answer
+            return {"answer": answer, "intent": "feedback_recovery"}
 
-        if intent and intent not in ['saudacao', 'desconhecido', 'erro_processamento']:
-            return self._handle_structured_intent(intent, entities)
+        if intent and intent not in ['saudacao', 'desconhecido', 'modo_generativo', 'erro_processamento']:
+            answer = self._handle_structured_intent(intent, entities)
+            return {"answer": f"{answer}", "intent": intent}
 
-        return self.generative_service.generate_free_response(user_input)
+        answer = self.generative_service.generate_free_response(user_input)
+        return {"answer": answer, "intent": "generativo"}
 
     def _handle_structured_intent(self, intent: str, entities: dict) -> str:
         """
@@ -158,7 +159,10 @@ class ChatbotService:
         """
         local = (entities.get("local") or "").strip().lower()
         campus = (entities.get("campus") or "").strip()
-        info = (entities.get("info") or "horarios").strip().lower()
+        info = (entities.get("info") or "").strip().lower()
+        assunto = (entities.get("assunto") or "").strip().lower()
+
+        print("...Buscando entities...", local, campus, info, assunto)
 
         if not local and not campus:
             locs = self.content_service.locais()
@@ -170,7 +174,6 @@ class ChatbotService:
         if not local and campus:
             return f"Certo! Em **{campus}**, qual local você deseja consultar? (Ex.: biblioteca, secretaria)"
 
-        # Temos local + campus
         if info == "horarios":
             data = self.content_service.horarios(local=local, campus=campus)
             if "erro" in data:
@@ -189,12 +192,10 @@ class ChatbotService:
                 return f"Não encontrei contatos para **{local}** em **{campus}**."
             return self._formatar_contatos(data)
 
-        # padrão
         data = self.content_service.horarios(local=local, campus=campus)
         return self._formatar_horarios(data) if data else f"Não encontrei dados para **{local}** em **{campus}**."
 
     def _formatar_locais(self, data: dict) -> str:
-        # data: { "campi": [ { "campus": "...", "locais": [ {"id","nome"}, ... ] }, ... ] }
         campi = data.get("campi", []) or []
         if not campi:
             return "No momento não encontrei a lista de locais por campus."
@@ -207,7 +208,6 @@ class ChatbotService:
         return "\n".join(linhas)
 
     def _formatar_horarios(self, data: dict) -> str:
-        # data: { local, campus, descricao_curta, horarios: {segunda_sexta, sabado, domingo}, observacoes_acessibilidade: [] }
         h = (data.get("horarios") or {})
         obs = data.get("observacoes_acessibilidade") or []
         linhas = [

@@ -3,13 +3,13 @@
 import os
 import json
 import re
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 import google.generativeai as genai
 from google.generativeai.types import GenerationConfigDict
 from dotenv import load_dotenv
 from .educational_content_service import EducationalContentService
-
+from .feedback_service import FeedbackService
 
 class NLUService:
     """
@@ -39,12 +39,25 @@ class NLUService:
 
         self.model = genai.GenerativeModel(
             model_name,
-            generation_config=gen_cfg,  # dict tipado
+            generation_config=gen_cfg,
             system_instruction="Retorne APENAS JSON válido com 'intent' e 'entities'.",
         )
 
         self.content_service = EducationalContentService()
+        self.feedback_service = FeedbackService()
         print("NLUService inicializado com sucesso.")
+
+        self._intents_validas = {
+            "buscar_conteudo_disciplina",
+            "aprofundar_topico",
+            "consultar_informacao_institucional",
+            "buscar_video_educacional",
+            "explicar_funcionalidades",
+            "saudacao",
+            "modo_generativo",
+            "desconhecido",
+            "erro_processamento",
+        }
 
     def analyze_text(self, text: str) -> dict:
         """
@@ -52,6 +65,20 @@ class NLUService:
         especializado para o contexto educacional do TCC.
         Mantém a estratégia original de exemplos e limpeza de JSON.
         """
+        user_text = (text or "").strip()
+
+        bad_intents: List[str] = self.feedback_service.get_negative_intents_for_similar_text(
+            user_text, min_score=0.70
+        )
+
+        avoid_clause = ""
+        if bad_intents:
+            lista = ", ".join(f"'{i}'" for i in bad_intents)
+            avoid_clause = (
+                "Atenção: Para textos semelhantes a este, usuários reprovaram as intenções "
+                f"{lista}. EVITE classificá-lo como {lista}. Se houver dúvida, retorne 'desconhecido'.\n"
+            )
+
         prompt = f"""
         Você é o cérebro de um chatbot educacional da universidade UNISINOS.
         Seu objetivo é ajudar estudantes, incluindo aqueles com deficiência visual e auditiva, a encontrar informações acadêmicas e educacionais.
@@ -67,6 +94,7 @@ class NLUService:
         - 'modo_generativo': O usuário quer usar diretamente a IA generativa, sem intenções específicas.
         - 'desconhecido': A intenção não se encaixa em nenhuma das anteriores.
 
+        {avoid_clause}
         Siga rigorosamente os exemplos abaixo para formatar sua resposta.
         Retorne APENAS JSON. Não inclua comentários, markdown ou texto fora do JSON.
 
@@ -129,7 +157,7 @@ class NLUService:
         JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": ""}}}}
 
         Agora, analise o seguinte texto:
-        Texto: "{text}"
+        Texto: "{user_text}"
         JSON:
         """
 
@@ -150,15 +178,13 @@ class NLUService:
                 result["entities"] = entities
 
             # Sanitiza intent inesperada
-            intents_validas = {
-                "buscar_conteudo_disciplina",
-                "aprofundar_topico",
-                "consultar_informacao_institucional",
-                "buscar_video_educacional",
-                "explicar_funcionalidades",
-            }
-            if result.get("intent") not in intents_validas:
+            intent = result.get("intent", "desconhecido")
+            if intent not in self._intents_validas:
                 result["intent"] = "desconhecido"
+            result["intent"] = intent
+
+            if not isinstance(result.get("entities"), dict):
+                result["entities"] = {}
 
             return result
 

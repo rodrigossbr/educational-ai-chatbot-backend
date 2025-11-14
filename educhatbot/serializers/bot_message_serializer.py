@@ -14,3 +14,4 @@ class BotMessageSerializer(serializers.Serializer):
     feedback_enabled = serializers.BooleanField(
         help_text="Feedbak de mensagem útil habilitado para a resposta."
     )
+    detected_intent = serializers.CharField(allow_blank=True, allow_null=True, help_text="Intent gerado pela IA.")

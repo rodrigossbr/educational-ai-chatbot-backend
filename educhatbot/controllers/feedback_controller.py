@@ -34,7 +34,8 @@ class FeedbackController(APIView):
             data.get("session_id"),
             data.get("user_question"),
             data.get("bot_answer"),
-            data.get("helpful", None)
+            data.get("helpful", None),
+            data.get("detected_intent", None)
         )
 
         serializer = FeedbackResponseSerializer(saved_feedback)

@@ -9,5 +9,5 @@ class FeedbackRequestSerializer(serializers.Serializer):
     user_question = serializers.CharField(max_length=500, help_text="Mensagem enviada pelo usuário.")
     bot_answer = serializers.CharField(max_length=500, help_text="Mensagem enviada pelo chatboot.")
     helpful = serializers.BooleanField(required=False, allow_null=True, help_text="Indica se a resposta do chatbot foi útil.")
-
+    detected_intent = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
