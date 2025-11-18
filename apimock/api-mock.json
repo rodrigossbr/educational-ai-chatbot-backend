@@ -267,6 +267,47 @@
           "callbacks": []
         },
         {
+          "uuid": "74fbef13-cfe9-483b-bc54-9c512c4b7b33",
+          "body": "{\r\n  \"topico\": \"Porcentagem\",\r\n  \"disciplina\": \"Matemática\",\r\n  \"descricao\": \"A porcentagem expressa uma razão em relação a 100 e é amplamente usada em descontos, juros e estatísticas.\",\r\n  \"detalhamento\": {\r\n    \"etapas\": [\r\n      \"1. Identificar o valor base e o percentual.\",\r\n      \"2. Calcular o percentual sobre o valor base.\",\r\n      \"3. Aplicar o resultado conforme o contexto (aumento, desconto, etc.).\"\r\n    ],\r\n    \"referencias\": [\r\n      { \"titulo\": \"Porcentagem - Toda Matéria\", \"url\": \"https://www.todamateria.com.br/porcentagem/\" }\r\n    ]\r\n  }\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Matemática - geometria básica",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "geometria basica",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "geometria",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "topico",
+              "value": "geometria básica",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
           "uuid": "06973c65-d545-4f86-add9-1300d28cffa7",
           "body": "{\r\n  \"disciplina\": \"Português\",\r\n  \"topicos\": [\r\n    {\r\n      \"id\": \"interpretacao\",\r\n      \"titulo\": \"Interpretação de texto\",\r\n      \"resumo_simplificado\": \"Ler com atenção para entender ideias principais e implícitas.\"\r\n    },\r\n    {\r\n      \"id\": \"ortografia\",\r\n      \"titulo\": \"Ortografia\",\r\n      \"resumo_simplificado\": \"Regras de escrita correta das palavras.\"\r\n    },\r\n    {\r\n      \"id\": \"redacao\",\r\n      \"titulo\": \"Redação\",\r\n      \"resumo_simplificado\": \"Texto com introdução, desenvolvimento e conclusão.\"\r\n    }\r\n  ]\r\n}\r\n\r\n",
           "latency": 0,
@@ -516,6 +557,88 @@
       "method": "get",
       "endpoint": "api/institucional/horarios",
       "responses": [
+        {
+          "uuid": "731b6ecb-df64-4263-8d92-10b6fc52c359",
+          "body": "{\r\n  \"local\": \"Biblioteca\",\r\n  \"campus\": \"Porto Alegre\",\r\n  \"descricao_curta\": \"Empréstimo, estudo e pesquisa.\",\r\n  \"horarios\": {\r\n    \"segunda_sexta\": \"08:00 às 21:30\",\r\n    \"sabado\": \"09:00 às 13:00\",\r\n    \"domingo\": \"Fechado\"\r\n  },\r\n  \"observacoes_acessibilidade\": [\r\n    \"Rota acessível por elevador.\",\r\n    \"Materiais em Braille mediante solicitação.\"\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Porto Alegre - Biblioteca",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "biblioteca",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "Porto alegre",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "poto alegre",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "1a91a68f-7f91-4382-9513-35e962792848",
+          "body": "{\r\n  \"local\": \"Secretaria Acadêmica\",\r\n  \"campus\": \"Porto Alegre\",\r\n  \"descricao_curta\": \"Atendimento a matrículas e documentos.\",\r\n  \"horarios\": {\r\n    \"segunda_sexta\": \"09:00 às 19:00\",\r\n    \"sabado\": \"Fechado\",\r\n    \"domingo\": \"Fechado\"\r\n  },\r\n  \"observacoes_acessibilidade\": [\r\n    \"Atendimento prioritário e janela baixa.\",\r\n    \"Intérprete de Libras nas quartas, 14h às 17h.\"\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Porto Alegre - Secretaria Acadêmica",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "secretaria",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "porto alegre",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "Porto Alegre",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
         {
           "uuid": "d62a80b5-c9dd-4494-b18c-d62df5cbfc67",
           "body": "{\r\n  \"local\": \"Biblioteca\",\r\n  \"campus\": \"São Leopoldo\",\r\n  \"descricao_curta\": \"Empréstimo, estudo e pesquisa.\",\r\n  \"horarios\": {\r\n    \"segunda_sexta\": \"08:00 às 21:30\",\r\n    \"sabado\": \"09:00 às 13:00\",\r\n    \"domingo\": \"Fechado\"\r\n  },\r\n  \"observacoes_acessibilidade\": [\r\n    \"Rota acessível por elevador.\",\r\n    \"Materiais em Braille mediante solicitação.\"\r\n  ]\r\n}",
@@ -771,6 +894,74 @@
               "target": "query",
               "modifier": "campus",
               "value": "São Leopoldo",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "22f008f5-8f0f-4bd8-93e0-e2c60a2c8f0c",
+          "body": "{\r\n  \"local\": \"Biblioteca\",\r\n  \"campus\": \"Porto alegre\",\r\n  \"faq\": [\r\n    {\r\n      \"pergunta\": \"Posso renovar livros pela internet?\",\r\n      \"resposta_simplificada\": \"Sim. Use o portal da biblioteca com seu login.\"\r\n    },\r\n    {\r\n      \"pergunta\": \"Há salas de estudo em grupo?\",\r\n      \"resposta_simplificada\": \"Sim. Reserve com antecedência pelo sistema.\"\r\n    },\r\n    {\r\n      \"pergunta\": \"Existe acervo acessível?\",\r\n      \"resposta_simplificada\": \"Há audiolivros e leitores de tela nas ilhas de pesquisa.\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Porto Alegre - Biblioteca",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "biblioteca",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "porto alegre",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "f8548849-139b-4067-9920-82fb89b3bf6c",
+          "body": "{\r\n  \"local\": \"Secretaria Acadêmica\",\r\n  \"campus\": \"Porto Alegre\",\r\n  \"faq\": [\r\n    {\r\n      \"pergunta\": \"Como emitir atestado de matrícula?\",\r\n      \"resposta_simplificada\": \"No portal do aluno, aba Documentos.\"\r\n    },\r\n    {\r\n      \"pergunta\": \"Como pedir histórico escolar?\",\r\n      \"resposta_simplificada\": \"Solicite pelo portal. Entrega em até 3 dias úteis.\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Porto Alegre - Secretaria Acadêmica",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "local",
+              "value": "secretaria",
+              "invert": false,
+              "operator": "equals"
+            },
+            {
+              "target": "query",
+              "modifier": "campus",
+              "value": "porto alegre",
               "invert": false,
               "operator": "equals"
             }
