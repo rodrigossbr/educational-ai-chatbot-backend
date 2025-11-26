@@ -1,36 +1,47 @@
-# generative_service.py
-
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class GenerativeService:
     def __init__(self):
         load_dotenv()
         api_key = os.getenv("GEMINI_API_KEY")
-        model = os.getenv("GEMINI_MODEL")
+        model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")  # Fallback seguro
+
         if not api_key:
             raise ValueError("A chave GEMINI_API_KEY não foi encontrada.")
 
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(model)
-        print("GenerativeService inicializado.")
+        self.model = genai.GenerativeModel(model_name)
+        logger.info("GenerativeService inicializado.")
 
     def generate_free_response(self, prompt_usuario: str) -> str:
         """
-        Gera uma resposta conversacional e aberta para um prompt do usuário.
+        Gera uma resposta conversacional com links de busca seguros contra alucinação.
         """
-        # Prompt focado em ser um assistente prestativo
         prompt_completo = f"""
-        Você é um chatbot educacional acessível e amigável chamado ED, criado para um TCC da UNISINOS.
-        Seu objetivo é ajudar os estudantes. Responda à pergunta do usuário de forma clara, prestativa e concisa.
+        Você é o ED, chatbot da UNISINOS.
 
-        Pergunta do usuário: "{prompt_usuario}"
-        Sua resposta:
+        REGRA DE OURO PARA LINKS (Anti-Alucinação):
+        1. **NUNCA** invente URLs diretas para artigos ou notícias (ex: não use 'unisinos.br/noticia/xyz').
+        2. Se precisar recomendar leitura, crie um **Link de Busca no Google** restrito ao site da universidade.
+           Padrão: [Buscar sobre TEMA no site da Unisinos](https://www.google.com/search?q=site:unisinos.br+TEMA)
+        3. Você pode usar links oficiais seguros que você tem certeza absoluta, como:
+           - https://www.unisinos.br
+           - https://www.unisinos.br/graduacao
+           - https://www.unisinos.br/biblioteca
+
+        Pergunta: "{prompt_usuario}"
+
+        Responda de forma útil, curta e inclua 1 link de busca no final se o assunto pedir aprofundamento.
         """
+
         try:
             response = self.model.generate_content(prompt_completo)
             return response.text
         except Exception as e:
-            return f"Desculpe, ocorreu um erro ao tentar gerar uma resposta: {e}"
+            return "Desculpe, não consegui gerar a resposta agora."
