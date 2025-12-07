@@ -11,36 +11,34 @@ from dotenv import load_dotenv
 from .educational_content_service import EducationalContentService
 from .feedback_service import FeedbackService
 
+
 class NLUService:
     """
     Um serviço para realizar tarefas de NLU (Natural Language Understanding)
     usando a API do Google Gemini, otimizado para um chatbot educacional.
-    Mantém o estilo original: prompt exemplificado e limpeza de JSON via regex.
     """
 
     def __init__(self):
-        """
-        Inicializa o serviço, carrega a API key e configura o modelo Gemini.
-        """
         load_dotenv()
         api_key = os.getenv("GEMINI_API_KEY")
         model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 
+        print(f"TESTE: {model_name}")
         if not api_key:
             raise ValueError("A chave GEMINI_API_KEY não foi encontrada. Verifique seu arquivo .env")
 
         genai.configure(api_key=api_key)
 
-        # Configuração tipada (evita o warning de type checker no VS Code/Pylance)
+        # Configuração para garantir saída JSON
         gen_cfg: GenerationConfigDict = {
             "response_mime_type": "application/json",
-            "temperature": 0.2,
+            "temperature": 0.2,  # Temperatura baixa para ser mais determinístico
         }
 
         self.model = genai.GenerativeModel(
             model_name,
             generation_config=gen_cfg,
-            system_instruction="Retorne APENAS JSON válido com 'intent' e 'entities'.",
+            system_instruction="Você é um assistente de NLU. Retorne APENAS um objeto JSON válido contendo as chaves 'intent' e 'entities'.",
         )
 
         self.content_service = EducationalContentService()
@@ -61,12 +59,11 @@ class NLUService:
 
     def analyze_text(self, text: str) -> dict:
         """
-        Analisa um texto para extrair a intenção e as entidades, com um prompt
-        especializado para o contexto educacional do TCC.
-        Mantém a estratégia original de exemplos e limpeza de JSON.
+        Analisa o texto para extrair intenção e entidades.
         """
         user_text = (text or "").strip()
 
+        # Verifica feedbacks negativos anteriores para evitar repetir erros
         bad_intents: List[str] = self.feedback_service.get_negative_intents_for_similar_text(
             user_text, min_score=0.70
         )
@@ -75,109 +72,83 @@ class NLUService:
         if bad_intents:
             lista = ", ".join(f"'{i}'" for i in bad_intents)
             avoid_clause = (
-                "Atenção: Para textos semelhantes a este, usuários reprovaram as intenções "
-                f"{lista}. EVITE classificá-lo como {lista}. Se houver dúvida, retorne 'desconhecido'.\n"
+                f"OBSERVAÇÃO CRÍTICA: Usuários já indicaram que este texto NÃO deve ser classificado como: {lista}. "
+                "Se estiver em dúvida, prefira 'desconhecido' ou 'modo_generativo'.\n"
             )
 
+        # Prompt ajustado (Correção do Exemplo 9.1 aplicada)
         prompt = f"""
-        Você é o cérebro de um chatbot educacional da universidade UNISINOS.
-        Seu objetivo é ajudar estudantes, incluindo aqueles com deficiência visual e auditiva, a encontrar informações acadêmicas e educacionais.
-        Analise o texto do usuário e retorne um objeto JSON com a "intent" (intenção) e as "entities" (entidades) extraídas.
+        Analise o texto do usuário para um chatbot da universidade UNISINOS.
+        Objetivo: Identificar a 'intent' (intenção) e extrair 'entities' (entidades).
 
-        As intenções possíveis são:
-        - 'buscar_conteudo_disciplina': O usuário quer disciplinas, materiais, links ou informações sobre uma disciplina ou curso.
-        - 'aprofundar_topico': O usuário quer se aprofundar em um tema ou tópico de estudo.
-        - 'consultar_informacao_institucional': O usuário pergunta sobre locais (biblioteca, secretarias), horários ou FAQs da universidade.
-        - 'buscar_video_educacional': O usuário pede por um vídeo sobre um assunto de estudo.
-        - 'explicar_funcionalidades': O usuário pergunta sobre o que o chatbot pode fazer ou como pode ajudar.
-        - 'saudacao': O usuário está apenas cumprimentando.
-        - 'modo_generativo': O usuário quer usar diretamente a IA generativa, sem intenções específicas.
-        - 'desconhecido': A intenção não se encaixa em nenhuma das anteriores.
+        INTENÇÕES DISPONÍVEIS:
+        - 'buscar_conteudo_disciplina': Materiais, ementas, links de disciplinas.
+        - 'aprofundar_topico': Explicações conceituais sobre um tema.
+        - 'consultar_informacao_institucional': Locais, horários, contatos, secretaria.
+        - 'buscar_video_educacional': Solicitação explícita de vídeos.
+        - 'explicar_funcionalidades': O que o bot faz.
+        - 'saudacao': Oi, olá, tudo bem.
+        - 'modo_generativo': Conversa livre, perguntas gerais fora do contexto acadêmico estrito ou pedido para falar com a IA.
+        - 'desconhecido': Não se encaixa nas anteriores.
 
         {avoid_clause}
-        Siga rigorosamente os exemplos abaixo para formatar sua resposta.
-        Retorne APENAS JSON. Não inclua comentários, markdown ou texto fora do JSON.
 
-        ---
-        Exemplo 1:
+        EXEMPLOS (Few-Shot Learning):
+
         Texto: "Quais disciplinas tem?"
         JSON: {{"intent": "buscar_conteudo_disciplina", "entities": {{ "disciplina": "" }}}}
 
-        Exemplo 1.1:
-        Texto: "Sobre quais disciplinas vc pode me ajudar?"
-        JSON: {{"intent": "buscar_conteudo_disciplina", "entities": {{ "disciplina": "" }}}}
-
-        Exemplo 1.2:
         Texto: "Me de o conteúdo de matemática?"
         JSON: {{"intent": "buscar_conteudo_disciplina", "entities": {{ "disciplina": "matematica" }}}}
 
-        Exemplo 1.3:
-        Texto: "Me de informações sobre Ciências?"
-        JSON: {{"intent": "buscar_conteudo_disciplina", "entities": {{ "disciplina": "ciencias" }}}}
-
-        Exemplo 2:
-        Texto: "Onde eu acho o material de TCC2?"
-        JSON: {{"intent": "buscar_conteudo_disciplina", "entities": {{"disciplina": "tcc2"}}}}
-
-        Exemplo 3:
-        Texto: "Qual o horário de funcionamento da biblioteca do campus São Leopoldo?"
+        Texto: "Qual o horário da biblioteca em São Leopoldo?"
         JSON: {{"intent": "consultar_informacao_institucional", "entities": {{"local": "biblioteca", "campus": "São Leopoldo"}}}}
 
-        Exemplo 4:
-        Texto: "preciso de um vídeo sobre a história do Brasil colonial"
-        JSON: {{"intent": "buscar_video_educacional", "entities": {{"assunto": "história do Brasil colonial"}}}}
+        Texto: "preciso de um vídeo sobre história do Brasil"
+        JSON: {{"intent": "buscar_video_educacional", "entities": {{"assunto": "história do Brasil"}}}}
 
-        Exemplo 5:
-        Texto: "como você pode me ajudar?"
+        Texto: "como você funciona?"
         JSON: {{"intent": "explicar_funcionalidades", "entities": {{}}}}
 
-        Exemplo 6:
-        Texto: "Oi, tudo bem?"
+        Texto: "Oi"
         JSON: {{"intent": "saudacao", "entities": {{}}}}
-        ---
-        
-        Exemplo 7:
+
         Texto: "Quero falar direto com a IA"
         JSON: {{"intent": "modo_generativo", "entities": {{}}}}
-        
-        Exemplo 8:
-        Texto: "Pesquisar na internet"
-        JSON: {{"intent": "modo_generativo", "entities": {{}}}}
 
-        Exemplo 9:
         Texto: "Quero saber mais sobre fotossíntese"
         JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": "fotossintese"}}}}
-        
-        Exemplo 9.1:
-        Texto: "Quero saber mais sobre equações"
-        JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": "fotossintese"}}}}
-        
-        Exemplo 10:
-        Texto: "Aprofunda esse tópico pra mim"
+
+        Texto: "Me explica equações de segundo grau"
+        JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": "equações de segundo grau"}}}}
+
+        Texto: "Aprofunda isso"
         JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": ""}}}}
 
-        Agora, analise o seguinte texto:
+        ---
+        INPUT DO USUÁRIO:
         Texto: "{user_text}"
-        JSON:
+
+        RESPOSTA JSON:
         """
 
         try:
             response = self.model.generate_content(prompt)
             raw_text = response.text or ""
 
-            # Mantém a limpeza via regex (compatível com saídas envoltas em ```json ... ```)
+            # Limpeza robusta
             cleaned_response = self._clean_json_response(raw_text)
 
-            # Parse do JSON
+            # Parse
             result: Dict[str, Any] = json.loads(cleaned_response)
 
-            # Normalização da entidade de disciplina via aliases vindos da API
+            # Normalização de disciplina (se houver)
             entities = result.get("entities") or {}
-            if "disciplina" in entities:
+            if "disciplina" in entities and entities["disciplina"]:
                 entities["disciplina"] = self.content_service.normalize(entities.get("disciplina"))
                 result["entities"] = entities
 
-            # Sanitiza intent inesperada
+            # Validação da intenção
             intent = result.get("intent", "desconhecido")
             if intent not in self._intents_validas:
                 result["intent"] = "desconhecido"
@@ -189,18 +160,27 @@ class NLUService:
             return result
 
         except Exception as e:
-            print(f"Erro ao analisar o texto: {e}")
+            print(f"Erro ao analisar o texto (NLU): {e}")
+            # Fallback seguro
             return {
                 "intent": "erro_processamento",
-                "entities": {"details": str(e)}
+                "entities": {"error": str(e)}
             }
 
     def _clean_json_response(self, text: str) -> str:
         """
-        Se a resposta vier em bloco markdown ```json ... ```, extrai apenas o objeto JSON.
-        Caso contrário, retorna o texto com strip().
+        Remove blocos de código Markdown (```json ... ```) se existirem.
+        O regex agora é mais permissivo, aceitando ```json, ``` ou sem nada.
         """
-        match = re.search(r'```json\s*(\{.*?\})\s*```', text, re.DOTALL)
+        # Tenta encontrar o bloco de código
+        match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', text, re.DOTALL)
         if match:
             return match.group(1)
+
+        # Se não tiver bloco de código, tenta encontrar o primeiro objeto JSON válido { ... }
+        # Isso ajuda se o modelo responder algo como "Aqui está o JSON: { ... }"
+        match_simple = re.search(r'(\{.*\})', text, re.DOTALL)
+        if match_simple:
+            return match_simple.group(1)
+
         return text.strip()
