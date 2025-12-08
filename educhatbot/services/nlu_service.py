@@ -1,5 +1,3 @@
-# nlu_service.py
-
 import os
 import json
 import re
@@ -23,7 +21,6 @@ class NLUService:
         api_key = os.getenv("GEMINI_API_KEY")
         model_name = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
 
-        print(f"TESTE: {model_name}")
         if not api_key:
             raise ValueError("A chave GEMINI_API_KEY não foi encontrada. Verifique seu arquivo .env")
 
@@ -76,7 +73,6 @@ class NLUService:
                 "Se estiver em dúvida, prefira 'desconhecido' ou 'modo_generativo'.\n"
             )
 
-        # Prompt ajustado (Correção do Exemplo 9.1 aplicada)
         prompt = f"""
         Analise o texto do usuário para um chatbot da universidade UNISINOS.
         Objetivo: Identificar a 'intent' (intenção) e extrair 'entities' (entidades).
@@ -84,7 +80,7 @@ class NLUService:
         INTENÇÕES DISPONÍVEIS:
         - 'buscar_conteudo_disciplina': Materiais, ementas, links de disciplinas.
         - 'aprofundar_topico': Explicações conceituais sobre um tema.
-        - 'consultar_informacao_institucional': Locais, horários, contatos, secretaria.
+        - 'consultar_informacao_institucional': Locais, horários, contatos, secretaria, FAQ (Perguntas Frequentes).
         - 'buscar_video_educacional': Solicitação explícita de vídeos.
         - 'explicar_funcionalidades': O que o bot faz.
         - 'saudacao': Oi, olá, tudo bem.
@@ -102,7 +98,16 @@ class NLUService:
         JSON: {{"intent": "buscar_conteudo_disciplina", "entities": {{ "disciplina": "matematica" }}}}
 
         Texto: "Qual o horário da biblioteca em São Leopoldo?"
-        JSON: {{"intent": "consultar_informacao_institucional", "entities": {{"local": "biblioteca", "campus": "São Leopoldo"}}}}
+        JSON: {{"intent": "consultar_informacao_institucional", "entities": {{"local": "biblioteca", "campus": "São Leopoldo", "info": "horarios"}}}}
+
+        Texto: "Gostaria de ver o FAQ da Unisinos"
+        JSON: {{"intent": "consultar_informacao_institucional", "entities": {{"info": "faq"}}}}
+
+        Texto: "Quais as perguntas frequentes da biblioteca?"
+        JSON: {{"intent": "consultar_informacao_institucional", "entities": {{"local": "biblioteca", "info": "faq"}}}}
+
+        Texto: "Qual o telefone da secretaria?"
+        JSON: {{"intent": "consultar_informacao_institucional", "entities": {{"local": "secretaria", "info": "contatos"}}}}
 
         Texto: "preciso de um vídeo sobre história do Brasil"
         JSON: {{"intent": "buscar_video_educacional", "entities": {{"assunto": "história do Brasil"}}}}
@@ -121,9 +126,6 @@ class NLUService:
 
         Texto: "Me explica equações de segundo grau"
         JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": "equações de segundo grau"}}}}
-
-        Texto: "Aprofunda isso"
-        JSON: {{"intent": "aprofundar_topico", "entities": {{"topico": ""}}}}
 
         ---
         INPUT DO USUÁRIO:
@@ -170,15 +172,11 @@ class NLUService:
     def _clean_json_response(self, text: str) -> str:
         """
         Remove blocos de código Markdown (```json ... ```) se existirem.
-        O regex agora é mais permissivo, aceitando ```json, ``` ou sem nada.
         """
-        # Tenta encontrar o bloco de código
         match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', text, re.DOTALL)
         if match:
             return match.group(1)
 
-        # Se não tiver bloco de código, tenta encontrar o primeiro objeto JSON válido { ... }
-        # Isso ajuda se o modelo responder algo como "Aqui está o JSON: { ... }"
         match_simple = re.search(r'(\{.*\})', text, re.DOTALL)
         if match_simple:
             return match_simple.group(1)

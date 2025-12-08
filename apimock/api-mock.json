@@ -740,10 +740,10 @@
       "responses": [
         {
           "uuid": "91029272-4003-40b4-9b41-73bedf1e80ef",
-          "body": "{\r\n  \"local\": \"Biblioteca\",\r\n  \"campus\": \"Porto Alegre\",\r\n  \"email\": \"biblioteca.poa@universidade.br\",\r\n  \"telefone\": \"+55 (51) 3333-0000\",\r\n  \"site\": \"https://biblioteca.universidade.br/poa\",\r\n  \"endereco\": \"Av. Exemplo, 123 - Porto Alegre - RS\",\r\n  \"mapa_url\": \"https://maps.example.com/?q=biblioteca+poa\",\r\n  \"acessibilidade\": [\r\n    \"Sinalização tátil no piso.\",\r\n    \"Atendimento prioritário.\"\r\n  ]\r\n}",
+          "body": "{\r\n  \"local\": \"Biblioteca\",\r\n  \"campus\": \"São Leopoldo\",\r\n  \"descricao_curta\": \"Empréstimo, estudo e pesquisa.\",\r\n  \"email\": \"biblioteca@unisinos.br\",\r\n  \"telefone\": \"(51) 3591-1122 Ramal 1234\",\r\n  \"site\": \"https://www.unisinos.br/biblioteca\",\r\n  \"endereco\": \"Av. Unisinos, 950 - Setor B\",\r\n  \"mapa_url\": \"https://maps.google.com/?q=biblioteca+unisinos\",\r\n  \"horarios\": {\r\n    \"segunda_sexta\": \"08:00 às 22:30\",\r\n    \"sabado\": \"08:00 às 17:00\",\r\n    \"domingo\": \"Fechado\"\r\n  },\r\n  \"acessibilidade\": [\r\n    \"Piso tátil em todo o acervo.\",\r\n    \"Lupas eletrônicas disponíveis.\",\r\n    \"Software leitor de tela nos computadores.\"\r\n  ],\r\n  \"observacoes_acessibilidade\": [\r\n    \"Rota acessível por elevador.\",\r\n    \"Materiais em Braille mediante solicitação.\"\r\n  ]\r\n}",
           "latency": 0,
           "statusCode": 200,
-          "label": "Porto Alegre - Biblioteca",
+          "label": "São Leopoldo - Biblioteca",
           "headers": [],
           "bodyType": "INLINE",
           "filePath": "",
@@ -760,7 +760,7 @@
             {
               "target": "query",
               "modifier": "campus",
-              "value": "Porto Alegre",
+              "value": "São Leopoldo",
               "invert": false,
               "operator": "equals"
             }
@@ -774,7 +774,7 @@
         },
         {
           "uuid": "3f6dd283-660b-4371-bb2c-59440879a617",
-          "body": "{\r\n  \"local\": \"Secretaria Acadêmica\",\r\n  \"campus\": \"São Leopoldo\",\r\n  \"descricao_curta\": \"Atendimento a matrículas e documentos.\",\r\n  \"horarios\": {\r\n    \"segunda_sexta\": \"09:00 às 19:00\",\r\n    \"sabado\": \"Fechado\",\r\n    \"domingo\": \"Fechado\"\r\n  },\r\n  \"observacoes_acessibilidade\": [\r\n    \"Atendimento prioritário e janela baixa.\",\r\n    \"Intérprete de Libras nas quartas, 14h às 17h.\"\r\n  ]\r\n}",
+          "body": "{\n  \"local\": \"Secretaria Acadêmica\",\n  \"campus\": \"São Leopoldo\",\n  \"email\": \"atendimento@unisinos.br\",\n  \"telefone\": \"(51) 3591-1122\",\n  \"site\": \"https://www.unisinos.br/minha-unisinos\",\n  \"endereco\": \"Av. Unisinos, 950 - Cristo Rei\",\n  \"horarios\": {\n    \"segunda_sexta\": \"09:00 às 19:00\",\n    \"sabado\": \"Fechado\",\n    \"domingo\": \"Fechado\"\n  },\n  \"observacoes_acessibilidade\": [\n    \"Atendimento prioritário.\",\n    \"Intérprete de Libras disponível.\"\n  ]\n}",
           "latency": 0,
           "statusCode": 200,
           "label": "São leopoldo - Secretaria Acadêmica",
@@ -996,6 +996,64 @@
       "responseMode": null,
       "streamingMode": null,
       "streamingInterval": 0
+    },
+    {
+      "uuid": "99e1aac0-c12a-4cf5-a5e4-7647d0d3fe1a",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "api/videos/educacional/videos",
+      "responses": [
+        {
+          "uuid": "ceabf7d8-a2fe-4e3d-be62-61199e7c210e",
+          "body": "{\r\n  \"assunto\": \"Matemática\",\r\n  \"videos\": [\r\n    {\r\n      \"titulo\": \"Matemática Básica\",\r\n      \"url\": \"https://youtube.com/...\",\r\n      \"descricao\": \"Aula de revisão\"\r\n    },\r\n    {\r\n      \"titulo\": \"Geometria\",\r\n      \"url\": \"https://youtube.com/...\",\r\n      \"descricao\": \"Aula de geometria\"\r\n    }\r\n  ]\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "video - matemática",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "query",
+              "modifier": "assunto",
+              "value": "matematica",
+              "invert": false,
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": false,
+          "crudKey": "id",
+          "callbacks": []
+        },
+        {
+          "uuid": "3bc1b0ec-653f-40a3-b394-89399904bea2",
+          "body": "{\n  \"erro\": \"Tópico não encontrado\"\n}",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Vazia",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
     }
   ],
   "rootChildren": [
@@ -1026,6 +1084,10 @@
     {
       "type": "route",
       "uuid": "c576570b-e6eb-47e9-86bf-6ee7b0aba94c"
+    },
+    {
+      "type": "route",
+      "uuid": "99e1aac0-c12a-4cf5-a5e4-7647d0d3fe1a"
     }
   ],
   "proxyMode": false,

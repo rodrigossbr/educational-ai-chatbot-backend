@@ -63,10 +63,9 @@ class EducationalContentService:
     def contatos(self, local: str, campus: str) -> dict:
         return self.http.get("/institucional/contatos", params={"local": local, "campus": campus}).json()
 
-
-
-
-
+    def buscar_videos(self, assunto: str) -> list:
+        resp = self.http.get("/videos/educacional/videos", params={"assunto": assunto}).json()
+        return resp.get('videos', [])
 
     def buscar(self, termo: str) -> Dict[str, Any]:
         resp = self.http.get("/busca", params={"q": termo})

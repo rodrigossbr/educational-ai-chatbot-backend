@@ -20,8 +20,14 @@ class ChatbotService:
         self.feedback_service = FeedbackService()
         logger.info("ChatbotService inicializado, pronto para orquestrar.")
 
-    def get_response(self, user_input: str, session_id: int | None = None, simplify: bool = False) -> dict:
+    def get_response(self, user_input: str, session_id: int | None = None,
+                     simplify: bool = False, last_messages: list = None) -> dict:
 
+        # Garante que last_messages seja uma lista, mesmo que venha None
+        if last_messages is None:
+            last_messages = []
+
+        # 0. Simplificação direta (Prioridade máxima)
         if simplify:
             prompt_simplificado = (
                 f"O usuário pediu: '{user_input}'.\n"
@@ -31,39 +37,54 @@ class ChatbotService:
             answer = self.generative_service.generate_free_response(prompt_simplificado)
             return {"answer": answer, "intent": "generativo_simplificado"}
 
-        # 1. Análise de NLU
-        nlu_result = self.nlu_service.analyze_text(user_input)
+        # ---------------------------------------------------------------------
+        # 1. Preparação do Contexto para NLU
+        # ---------------------------------------------------------------------
+
+        history_text = ""
+        for msg in last_messages:
+            role_label = "Usuário" if msg.get('role') == 'user' else "Bot"
+            content = msg.get('text', '')
+            if content:
+                history_text += f"{role_label}: {content}\n"
+
+        if history_text:
+            nlu_input = (
+                f"Histórico recente da conversa:\n{history_text}\n"
+                f"--- Fim do Histórico ---\n\n"
+                f"Mensagem ATUAL do Usuário: {user_input}"
+            )
+            logger.info(f"Enviando NLU com contexto. Histórico de {len(last_messages)} mensagens.")
+        else:
+            nlu_input = user_input
+
+        # Chama o NLU
+        nlu_result = self.nlu_service.analyze_text(nlu_input)
         intent = nlu_result.get('intent')
         entities = nlu_result.get('entities', {})
 
-        # 2. Verifica se precisa de recuperação baseada em feedback negativo anterior
+        # ---------------------------------------------------------------------
+
+        # 2. Verifica feedback negativo
         fb = self.feedback_service.get_last_unconsumed_negative(session_id)
         if fb:
             answer = self._answer_with_feedback(user_input, session_id)
             self.feedback_service.mark_consumed(fb)
             return {"answer": answer, "intent": "feedback_recovery"}
 
-        # 3. Tenta resolver via Intents Estruturadas (Banco de Dados/Mock)
+        # 3. Tenta resolver via Intents Estruturadas
         ignored_intents = ['saudacao', 'desconhecido', 'modo_generativo', 'erro_processamento']
 
         if intent and intent not in ignored_intents:
             answer = self._handle_structured_intent(intent, entities)
-            # Se o handler estruturado retornou None, significa que não achou o dado.
-            # Então fazemos fallback para o generativo.
             if answer:
                 return {"answer": answer, "intent": intent}
 
-            # Se answer for None, cai para o bloco abaixo (Generativo)
-
-        # 4. Resposta Generativa (Fallback ou Conversa Aberta)
+        # 4. Resposta Generativa (Fallback)
         answer = self.generative_service.generate_free_response(user_input)
         return {"answer": answer, "intent": "generativo"}
 
     def _handle_structured_intent(self, intent: str, entities: dict) -> str | None:
-        """
-        Retorna a string de resposta ou None se não encontrar o conteúdo,
-        para permitir fallback para IA Generativa.
-        """
         if intent == 'buscar_conteudo_disciplina':
             return self._handle_buscar_conteudo_disciplina(entities)
 
@@ -74,8 +95,7 @@ class ChatbotService:
             return self._handle_institucional(entities)
 
         elif intent == 'buscar_video_educacional':
-            assunto = entities.get('assunto', 'não especificado')
-            return f"Perfeito! Procurando um vídeo educativo sobre: '{assunto}'."
+            return self._handle_videos(entities)
 
         elif intent == 'explicar_funcionalidades':
             return """Eu sou o ED, seu assistente educacional acessível. Minhas principais funções são:
@@ -116,12 +136,10 @@ class ChatbotService:
         disciplina = (entities.get('disciplina') or "").strip().lower()
         if not disciplina:
             discs = self.content_service.list_disciplinas()
-            # Corrigido escape de markdown
             nomes = "\n".join(f"- {d.get('nome', '')}" for d in discs)
             return f"Posso trazer conteúdos de:\n{nomes}\nQual disciplina você quer?"
 
         payload = self.content_service.get_conteudos(disciplina)
-        # Validação extra para evitar erro de get em lista vazia ou None
         if not payload:
             return f"Não encontrei a disciplina **{disciplina}**."
 
@@ -143,7 +161,6 @@ class ChatbotService:
         logger.info(f"...Buscando tópico: {topico}")
         data = self.content_service.get_aprofundamento(topico)
 
-        # LOGICA DE FALLBACK: Se der erro, retorna None para o Orchestrator chamar o Gemini
         if not data or "erro" in data:
             return None
 
@@ -173,15 +190,21 @@ class ChatbotService:
 
         logger.info(f"...Buscando entities: {local}, {campus}, {info}")
 
-        if not local and not campus:
+        # Verifica se deve retornar a lista genérica de locais
+        if not local and not campus and (not info or info == "horarios"):
             locs = self.content_service.locais()
             return self._formatar_locais(locs)
+
+        # Validações de contexto para pedir mais informações
+        if not local and not campus and info:
+            return f"Para acessar **{info.upper()}**, preciso que você informe o **campus** ou o **local**."
 
         if local and not campus:
             return f"Qual campus você deseja consultar para **{local}**? (Ex.: São Leopoldo, Porto Alegre)"
 
         if not local and campus:
-            return f"Certo! Em **{campus}**, qual local você deseja consultar? (Ex.: biblioteca, secretaria)"
+            tipo_info = f"ver {info} de" if info else "consultar"
+            return f"Certo! Em **{campus}**, qual local você deseja {tipo_info}? (Ex.: biblioteca, secretaria)"
 
         # Lógica de busca específica
         data = None
@@ -203,9 +226,30 @@ class ChatbotService:
                 return f"Não encontrei contatos para **{local}** em **{campus}**."
             return self._formatar_contatos(data)
 
-        # Default se não especificar info
+        # Default: Horários (caso info seja vazio, mas tenha local/campus)
         data = self.content_service.horarios(local=local, campus=campus)
         return self._formatar_horarios(data) if data else f"Não encontrei dados para **{local}** em **{campus}**."
+
+    def _handle_videos(self, data: dict) -> str:
+        assunto = data.get('assunto', '').strip()
+        if not assunto:
+            return "Sobre qual assunto você quer ver vídeos? (Ex: Matemática, História)"
+
+        videos = self.content_service.buscar_videos(assunto=assunto)
+
+        if not videos:
+            return f"Poxa, não encontrei vídeos sobre **{assunto}** na minha base agora."
+
+        resposta = f"🎬 **Vídeos sugeridos sobre {assunto}:**\n"
+        for v in videos:
+            titulo = v.get('titulo', 'Vídeo')
+            url = v.get('url', '#')
+            desc = v.get('descricao', '')
+            resposta += f"\n• [{titulo}]({url})"
+            if desc:
+                resposta += f" - {desc}"
+
+        return resposta
 
     def _formatar_locais(self, data: dict) -> str:
         campi = data.get("campi", []) or []
@@ -213,10 +257,8 @@ class ChatbotService:
             return "No momento não encontrei a lista de locais por campus."
         linhas = ["Posso consultar estes locais por campus:"]
         for c in campi:
-            # CORREÇÃO: startSession -> get
             campus_nome = c.get("campus", "Campus")
             locais_lista = c.get("locais") or []
-            # CORREÇÃO: startSession -> get
             nomes = ", ".join(l.get("nome", "") for l in locais_lista)
             linhas.append(f"• **{campus_nome}**: {nomes}")
         linhas.append("Diga: 'horários da biblioteca em São Leopoldo', por exemplo.")
